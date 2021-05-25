@@ -9,6 +9,9 @@
  * @license  openSource 
  * @link     https://revtech.co.za
  */
+
+require "Db.php";
+
 class User extends Db{
 
     private $tableName = 'users';

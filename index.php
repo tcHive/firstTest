@@ -11,7 +11,7 @@
  * @link     https://revtech.co.za
  */
 
-    require "Db.php";
+    
     require "User.php";
 
     $user = new User();
