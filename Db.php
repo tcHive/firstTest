@@ -21,6 +21,9 @@ class Db
 
     protected $pdo;
 
+    function __construct(){
+        $this->pdo = $this->connect();
+    }
     /**
      * Function to establish pdo
      * 
@@ -125,7 +128,6 @@ class Db
      *
      * @param $tableName name of table
      * @param Arr $columns   name of the column
-     * @param Arr/null $values    value of the column
      * @param default:null $where     name of column
      * 
      * @return Sql/bool
@@ -150,13 +152,9 @@ class Db
 
                 $stmt->execute($values);
 
-                $num = $stmt->rowCount();
-    
-            if ($num > 0) {
-            
-                    $row = $stmt->fetchAll();
-
-                return $row;
+                if ($num = $stmt->rowCount() && $num > 0) {
+              
+                return $row = $stmt->fetchAll();
             }
 
                 return false;
@@ -165,13 +163,9 @@ class Db
                 
                 $stmt->execute();
 
-                $num = $stmt->rowCount();
-    
-            if ($num > 0) {
+            if ($num = $stmt->rowCount() && $num > 0) {
             
-                $row = $stmt->fetchAll();
-            
-                return true;
+                return $row = $stmt->fetchAll();
             }
 
                 return false;
@@ -179,13 +173,13 @@ class Db
     }
 
     /**  
-    * Delete Function Api 
-    * 
-    * @param $tableName name of table
-    * @param $values    value of the column
-    * @param $where     name of column
-    * 
-    * @return bool
+     * Delete Function Api 
+     * 
+     * @param $tableName name of table
+     * @param $values    value of the column
+     * @param $where     name of column
+     * 
+     * @return bool
     **/
     protected function delete(string $tableName, $values, $where)
     { 
@@ -211,5 +205,6 @@ class Db
             $this->pdo = null;
     }
         
+
 }
 ?>
