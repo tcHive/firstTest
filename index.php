@@ -1,6 +1,6 @@
 <?php
 /**
- * Index page
+ * View
  * 
  * @category    Database
  * @package     FirstTest

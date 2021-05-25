@@ -1,6 +1,7 @@
 <?php
+    
 /**
- * User model
+ * Controller 
  * 
  * @category Database
  * @doc      Connector and data handler function 
@@ -16,13 +17,16 @@ class User extends Db{
 
     private $tableName = 'users';
 
+    protected $columns = ['name','email','password'];
+
+
     function __construct(){
             $this->pdo = $this->connect();
     }
 
     function setProperties( string $name, string $email, string $password){
 
-            $columns =['name','email','password'];
+            $columns =$this->columns;
             $values = [$name, $email, $password];
            
             if($this->insert($this->tableName, $columns, $values)){
@@ -36,7 +40,7 @@ class User extends Db{
 
     function updateProperties( string $name, string $email, string $password, $where){
 
-            $columns =['name','email','password'];
+            $columns = $this->columns;
             $values = [$name, $email, $password, $where];
             
             if($this->update($this->tableName, $columns, $values, 'id')){
@@ -54,9 +58,9 @@ class User extends Db{
             if( $where !== null){
 
                 $values = [$where];
-                $colunmToChange = 'id';
+                $colunmToSelect = 'email';
 
-                if($this->select($this->tableName, $columns,$values,$colunmToChange)){
+                if($this->select($this->tableName, $columns,$values,$colunmToSelect)){
 
                     echo 'true';
                 }else{
@@ -87,4 +91,4 @@ class User extends Db{
     }
         
 }
-?>
+

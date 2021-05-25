@@ -1,10 +1,11 @@
 <?php
 /**
- * Database class
- * Some form of short description
+ * Model
+ * 
+ * Database class Api
  * 
  * @category Database
- * @doc      Connector and data handler function 
+ * @doc      Connector and data handler Api
  * @package  FirstTest
  * @author   RamakhanyaD <techcodehive@gmail.com>
  * @license  openSource 
@@ -35,22 +36,24 @@ class Db
             $dsn = "mysql:hostname=$this->_host;dbname=$this->_db_name";
             $this->pdo = new PDO($dsn, $this->_user, $this->_password);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-            $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+            $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ); 
+            
+            return $this->pdo;
         }
         catch(PDOException $e){
 
             echo 'Connection Error'.$e->getMessage();
         }
 
-            return $this->pdo;
+           
     }
 
     /**  
-     * Halala
+     * Insert function Api
      *
      * @param $tableName name of table
-     * @param $columns   value of the column
-     * @param $values    value of the column
+     * @param Arr $columns   name of the column
+     * @param Arr $values    value of the column
      * 
      * @return bool
      * **/
@@ -84,12 +87,12 @@ class Db
     }
 
     /**  
-     * Halala
+     * Update Function Api
      *
      * @param $tableName name of table
-     * @param $columns   name of the column
-     * @param $values    value of the column
-     * @param $where     name of column we want to effect change
+     * @param Arr $columns   name of the column
+     * @param Arr $values    value of the column
+     * @param $where     id of column we want to effect change
      * 
      * @return bool
      * **/
@@ -118,14 +121,14 @@ class Db
     }
 
     /**  
-     * Halala
+     * Basic Select Function Api
      *
      * @param $tableName name of table
-     * @param $columns   value of the column
-     * @param $values    value of the column
-     * @param $where     name of column
+     * @param Arr $columns   name of the column
+     * @param Arr/null $values    value of the column
+     * @param default:null $where     name of column
      * 
-     * @return bool
+     * @return Sql/bool
      * **/
     protected function select(string $tableName, $columns, 
         $values = null, $where = null
@@ -153,11 +156,7 @@ class Db
             
                     $row = $stmt->fetchAll();
 
-                    var_dump($row);
-                    echo $row = implode(',', $columns);
-
-                    //error_log($row);
-                return true;
+                return $row;
             }
 
                 return false;
@@ -179,15 +178,15 @@ class Db
         }
     }
 
-        /**  
-         * Halala 
-         * 
-         * @param $tableName name of table
-         * @param $values    value of the column
-         * @param $where     name of column
-         * 
-         * @return bool
-         * **/
+    /**  
+    * Delete Function Api 
+    * 
+    * @param $tableName name of table
+    * @param $values    value of the column
+    * @param $where     name of column
+    * 
+    * @return bool
+    **/
     protected function delete(string $tableName, $values, $where)
     { 
             $sql = "
@@ -204,9 +203,9 @@ class Db
         }
     }
 
-        /** 
-         *  Null the PDO connector
-         *  */
+    /** 
+      *  Null the PDO connector
+     **/
     function __destruct()
     {
             $this->pdo = null;
