@@ -9,7 +9,7 @@
  * @author   RamakhanyaD <techcodehive@gmail.com>
  * @license  openSource 
  * @link     https://revtech.co.za
- */
+ **/
 class Db
 {
 

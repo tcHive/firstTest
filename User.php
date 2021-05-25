@@ -10,7 +10,7 @@
  * @link     https://revtech.co.za
  */
 
-require "Db.php";
+require "db.php";
 
 class User extends Db{
 
