@@ -1,19 +1,13 @@
 <?php
 /**
- * View
+ * Entry Point
  * 
- * @category    Database
- * @package     FirstTest
- * Connector and data handler function 
- * @author      RamakhanyaD <techcodehive@gmail.com>
- * @license     openSource 
- * @PHP_version PHP_version:<php_7.6>
- * @link        https://revtech.co.za
+ * @category Access point
+ * @doc      Connector and data handler Api
+ * @package  FirstTest
+ * @author   RamakhanyaD <techcodehive@gmail.com>
+ * @license  openSource 
+ * @link     https://revtech.co.za
  **/
 
-    
-    require "User.php";
-
-    $user = new User();
-
-    $user->selectProperties('27');
+require 'web/index.php';
