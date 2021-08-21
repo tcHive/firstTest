@@ -7,29 +7,27 @@
 
     $act = Helper::getUrlParam('cart');
 
-    if(! (array_key_exists( 'cart', $_GET) 
-            && in_array( $act, $action))){
+    if(! in_array( $act, $action)){
         throw  new NotFoundException("Cart activity not found");
     }
 
     $cart = new CartDao();
 
-    if(!array_key_exists('cartId', $_SESSION) 
-        && array_key_exists('cart',$_GET)){
+    if(! array_key_exists('cartId', $_SESSION)){
 
         $_SESSION['cartId'] = $cart->create();
 
         //$cart->inser($_SESSION['cart']);
     }
 
-    if( array_key_exists('id',$_GET) 
-        && $act == 'add'){
+    if( array_key_exists('id',$_GET)  && $act == 'add'){
 
         $id = Helper::getUrlParam('id');
      
-        $_SESSION['cart'][$id] = $id;
+        if(! array_key_exists($id, $_SESSION['cart'])){
+            $_SESSION['cart'][$id] = $id;
+        }
         
-        echo 'trying to add';
         /*
             $product = $cart->fetch($_SESSION['cart']);
             
@@ -44,8 +42,7 @@
         */
     }
 
-    if( array_key_exists('id',$_GET) 
-        && $act == 'delete'){
+    if( array_key_exists('id',$_GET) && $act == 'delete'){
 
         $id = Helper::getUrlParam('id');
      
@@ -56,15 +53,15 @@
         //$_SESSION['cart'][] = $id;
     }
 
-    if(array_key_exists('cart', $_SESSION)
-        && $act == 'view'){
+    //if( array_key_exists('cart', $_SESSION) && $act == 'view'){
         //$product = $cart->fetch($_SESSION['cart']);
         //$product = explode(',',$product->product);
         //var_dump($_SESSION['cart']);
-        
+
+        $i = 0;
         $products[] = new Product;
         foreach( $_SESSION['cart'] as $pdt){
             $product = new ProductDao();
-            $products[] = $product->selectProperties((int)$pdt);
+            $products[$i++] = $product->selectProperties((int)$pdt);
         }
-    }
+   // }
