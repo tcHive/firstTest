@@ -1,65 +1,80 @@
 <?php
 
+    // user template setup
+    $view = [
+        'register', 'login', 'forgot'
+    ];
 
+    if(array_key_exists('view',$_GET) && in_array($_GET['view'],$view)){
+        $action = Helper::getUrlParam('view');
+    }
+    else{
+        throw  new NotFoundException("View not found");
+    }
+
+    // user POST request 
     $errors = [];
 
     if(array_key_exists('register', $_POST)){
-        
-
         $data = [
-            'name' => $_POST['user']['name'],
-            'email' => $_POST['user']['email'],
-            'password' => $_POST['user']['password'],
-            'password2' => $_POST['user']['passwordRepeat']
+            'name' => isset($_POST['user']['name'])?$_POST['user']['name'] :'',
+            'email' => isset($_POST['user']['email'])?$_POST['user']['email'] :'',
+            'password' => isset($_POST['user']['password'])?$_POST['user']['password'] :'',
+            'password2' => isset($_POST['user']['passwordRepeat'])?$_POST['user']['passwordRepeat'] :''
         ];
-            //var_dump($data);
-        // $errors = UserValidator::validate($obj);
-         
-        if(empty($errors)){
-            
-            $obj = new User();
-            $obj->setParam($data);
+            $obj = new User();  
+            $errors = $obj->register($data);
 
-            $user = new UserDao();
-            $user->setProperties($obj);
+        if(empty($errors)){
+           
+           $user = new UserDao();
+           $user->setProperties($obj);
+
+           echo 'registration good';
         }
     }
     else if(array_key_exists('login', $_POST)){
 
         $data = [
-            'email' => $_POST['user']['email'],
-            'password' => $_POST['user']['password']
+            'email' => isset($_POST['user']['email'])?$_POST['user']['email'] :'',
+            'password' => isset($_POST['user']['password'])?$_POST['user']['password'] :''
         ];
 
-        // $errors = UserValidator::validate($obj);
-         
+        $obj = new User();  
+        $errors = $obj->login($data);
+
         if(empty($errors)){
 
-            $user = (new UserDao())
-                ->selectProperties();
+            $user = new UserDao();
+            $obj = $user->selectProperties('email', $obj);
 
-            if($user->getPassword() === $data['password']){
-
+            if($obj->getPassword() != $data['password']){
+                $errors[] = new ValidatorError('Login Failed', 'Incorrect Username or Password');
+            }
+            else{
+                echo 'welcome';
             }
         }
     }
     else if( array_key_exists('forgot', $_POST)){
 
         $data = [
-            'name' => $_POST['user']['name'],
-            'email' => $_POST['user']['email'],
+            'name' => isset($_POST['user']['name'])?$_POST['user']['name'] :'',
+            'email' => isset($_POST['user']['email'])?$_POST['user']['email'] :''
         ];
 
-        //$errors = UserValidator::validate($obj);
-         
-        /*if(empty($errors)){
+        $obj = new User();  
+        $errors = $obj->forgot($data);
+        if(empty($errors)){
             
-            $user = (new UserDao())
-                ->selectProperties();
+            $user = new UserDao();
+            $obj = $user->selectProperties('email', $obj);
 
-            
-        }*/
+            if($obj->getName() != $data['name']){
+                $errors[] = new ValidatorError('error', 'Incorrect Name / Email');
+            }
+            else{
+                echo 'welcome';
+            }
+        }
     }
-
-   
-    var_dump($_POST);

@@ -1,23 +1,23 @@
 <?php if(array_key_exists('cart', $_SESSION)):?>
-<div class="row">
-    <div class="col">
-        <ul class="list-group"> <?php foreach($products as $product):?>
-            <li class="list-group-item">
-            <span class="text-monospace" style="margin-right:0px;margin-left:15px;">
-                <p><?php echo $product->getName() ?></p>
-                <p><?php echo $product->getDescription();?></p>
-            </span>
-            <button class="btn btn-outline-success float-right" type="button">
-                <a href="<?php echo Helper::createLink('cart', ['id' => $product->getId()]);?>" class="card-link">add Cart</a>
-            </button>
-            <button class="btn btn-outline-success float-right" type="button">
-                <a href="<?php echo Helper::createLink('detail', ['id' => $product->getId()]);?>" class="card-link">Detail</a>
-            </button>
-            
-        </li><?php endforeach; ?>
-        </ul>
+    <div class="row">
+        <div class="col">
+            <ul class="list-group"> 
+                <?php foreach($products as $product):?>
+                    <li class="list-group-item">
+                        <span class="text-monospace" style="margin-right:0px;margin-left:15px;">
+                            <p><?php echo $product->getName() ?></p>
+                            <p><?php echo $product->getDescription();?></p>
+                        </span>
+                        <button class="btn btn-outline-danger float-right" type="button">
+                            <a href="<?php echo Helper::createLink('cart', 
+                                ['id' => $product->getId(), 'cart' => 'remove']);?>"
+                                    class="card-link">remove</a>
+                        </button>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
     </div>
-</div>
 <?php else:?>
     <h1> Cart Empty </h1>
 <?php endif?>

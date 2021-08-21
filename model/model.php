@@ -1,6 +1,5 @@
 <?php
 /**
- * 
  * Database, Data Access Api
  * 
  * @category Model
@@ -389,7 +388,6 @@ class mysqlsessionHandler extends Db implements SessionHandlerInterface {
  */
 class UserDao extends Db
 {
-
     private $tableName = 'users';
 
     private $col = 'id';
@@ -424,19 +422,19 @@ class UserDao extends Db
         return $result;
     }
 
-    function selectProperties( string $where, string $identifier ){
+    function selectProperties( string $identifier , User $obj ){
 
         $this->columns[3] = $this->col;
           
-        if(isset($where)){
+        if(isset($identifier)){
 
-            $values = [$where];
+            $values = [$obj->getEmail()];
 
             $result = $this->select($this->tableName, 
                 $this->columns, $identifier ,$values );
 
-            $user = (new User())
-                ->setParam($result[0]);
+            $user = new User();
+            $user->setParam($result[0]);
 
             return $user;
         }
@@ -586,19 +584,21 @@ class CartDao extends Db
 
     public function add(array $pdt, int $id){
 
-        $pdt = implode(',', $pdt);
+        //$pdt = implode(',', $pdt);
 
         $sql = "
             Update $this->tableName set product = ? where id = ?
         ";
 
-        $value = [$pdt, $id];
+        //$value = [$pdt, $id];
 
         $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(1,$pdt);
+        $stmt->bindParam(2,$id);
 
-        if ($stmt->execute($value)) {
+        if ($stmt->execute()) {
 
-                return true;
+            return true;
         } 
             throw new Exception("Failed to update query");
     }

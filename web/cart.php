@@ -1,8 +1,8 @@
 <?php
-
+/*
     $cart = new CartDao();
 
-    if(!array_key_exists('cart', $_SESSION) && array_key_exists('add',$_GET)){
+    if(!array_key_exists('cart', $_SESSION) && array_key_exists('cart',$_GET)){
 
         $_SESSION['cart'] = $cart->create();
 
@@ -10,14 +10,15 @@
     }
 
 
-    if(array_key_exists('id',$_GET)){
+    if(array_key_exists('id',$_GET) && array_key_exists('cart',$_GET)){
         $id = Helper::getUrlParam('id');
 
         $product = $cart->fetch($_SESSION['cart']);
         
-        if(!trim($product->product === null)){
+        /*if(!trim($product->product === null)){
             $product = explode(',',$product->product);
-        }
+        }*/
+/*
         $num = sizeof($product);
         
         $product[$num] = $id;
@@ -28,15 +29,15 @@
         $product = $cart->fetch($_SESSION['cart']);
 
     }*/
-
+/*
     if(array_key_exists('cart', $_SESSION)){
         $product = $cart->fetch($_SESSION['cart']);
-        $product = explode(',',$product->product);
+        //$product = explode(',',$product->product);
         var_dump($product);
-        
+        /*
         foreach( $product as $pdt){
             echo $pdt.'<br />';
             $products = new ProductDao();
             $products = $products->selectProperties((int)$pdt);
-        }
-    }
+        }*/
+    //}

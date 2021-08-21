@@ -1,19 +1,22 @@
 <div class="row">
-    <div class="col">
-        <ul class="list-group"> <?php foreach($products as $product):?>
-            <li class="list-group-item">
-            <span class="text-monospace" style="margin-right:0px;margin-left:15px;">
-                <p><?php echo $product->getName() ?></p>
-                <p><?php echo $product->getDescription();?></p>
-            </span>
-            <button class="btn btn-outline-success float-right" type="button">
-                <a href="<?php echo Helper::createLink('cart', ['id' => $product->getId(), 'add' => 'addCart']);?>" class="card-link">add Cart</a>
-            </button>
-            <button class="btn btn-outline-success float-right" type="button">
-                <a href="<?php echo Helper::createLink('detail', ['id' => $product->getId()]);?>" class="card-link">Detail</a>
-            </button>
-            
-        </li><?php endforeach; ?>
+    <div class="col-10 offset-md-1">
+        <ul class="list-group"> 
+            <?php foreach($products as $product):?>
+                <li class="list-group-item"> 
+                    <p><button class="btn btn-success float-right" type="button">
+                        <a href="<?php echo Helper::createLink('cart', ['id' => $product->getId(),
+                            'cart' => 'add']);?>" class="card-link" style="marging-left:10px;">add Cart</a>
+                    </button></p>
+                    <span class="text-monospace" style="margin-right:0px;margin-left:15px;">
+                        <p class="text-center"><?php echo $product->getName() ?></p>
+                        <p class="text-center"><?php echo $product->getDescription();?></p> 
+                    </span>
+                <p><button class="btn btn-outline-success float-right" type="button">
+                        <a href="<?php echo Helper::createLink('detail', ['id' => $product->getId()]);?>"
+                            class="card-link"  style="marging-right:15px;">Detail</a>
+                    </button></p>
+                </li>
+            <?php endforeach; ?>
         </ul>
     </div>
 </div>

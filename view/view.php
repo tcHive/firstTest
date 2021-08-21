@@ -68,6 +68,42 @@ final class Helper{
 }
 
 /**
+ * Validation error.
+ */
+final class ValidatorError {
+
+    private $source;
+    private $message;
+
+
+    /**
+     * Create new validation error.
+     * @param mixed $source source of the error
+     * @param string $message error message
+     */
+    function __construct($source, $message) {
+        $this->source = $source;
+        $this->message = $message;
+    }
+
+    /**
+     * Get source of the error.
+     * @return mixed source of the error
+     */
+    public function getSource() {
+        return $this->source;
+    }
+
+    /**
+     * Get error message.
+     * @return string error message
+     */
+    public function getMessage() {
+        return $this->message;
+    }
+}
+
+/**
  * User class Api
  */
 final class User{
@@ -81,23 +117,98 @@ final class User{
 
     }
 
-    public function setParam( array $user){
+    public function setParam(stdClass $user){
 
         if(array_key_exists('id', $user)){
             $this->id = $user->id;
         }
 
         if(array_key_exists('name', $user)){
-            $this->name = $user['name'];
+            $this->name = $user->name;
         }
 
         if(array_key_exists('email', $user)){
-            $this->email = $user['email'];
+            $this->email = $user->email;
         }
 
         if(array_key_exists('password', $user)){
+            $this->password = $user->password;
+        }
+    }
+
+    public function register( array $user){
+        $errors = [];
+
+        if(trim($user['name'])){
+            $this->name = $user['name'];
+        }
+        else{
+            $errors[] = new ValidatorError('name','name cannot be empty');
+        }
+
+        if(trim($user['email'])){
+            $this->email = $user['email'];
+        }
+        else{
+            $errors[] = new ValidatorError('email','email cannot be empty');
+        }
+
+        if(trim($user['password'])){
             $this->password = $user['password'];
         }
+        else{
+            $errors[] = new ValidatorError('password','password cannot be empty');
+        }
+        
+        if(trim($user['password2'])){
+            if($user['password2'] != $this->password){
+                $errors[] = new ValidatorError('Password Match','Password and passwordRepeat must match');
+            }
+        }
+        else{
+            $errors[] = new ValidatorError('passwordRepeat','passwordRepeat cannot be empty');
+        }
+        
+        return $errors;
+    }
+
+    public function login( array $user){
+        $errors = [];
+
+        if(trim($user['email'])){
+            $this->email = $user['email'];
+        }
+        else{
+            $errors[] = new ValidatorError('email','email cannot be empty');
+        }
+
+        if(trim($user['password'])){
+            $this->password = $user['password'];
+        }
+        else{
+            $errors[] = new ValidatorError('password','password cannot be empty');
+        }
+
+        return $errors;
+    }
+
+    public function forgot( array $user){
+        $errors = [];
+        if(trim($user['name'])){
+            $this->name = $user['name'];
+        }
+        else{
+            $errors[] = new ValidatorError('name','name cannot be empty');
+        }
+
+        if(trim($user['email'])){
+            $this->email = $user['email'];
+        }
+        else{
+            $errors[] = new ValidatorError('email','email cannot be empty');
+        }
+
+        return $errors;
     }
 
     public function getId(){
@@ -134,7 +245,7 @@ final class Product{
 
     }
 
-    public function setParam( $product){
+    public function setParam(stdClass $product){
 
         if(array_key_exists('id', $product)){
             $this->id = $product->id;

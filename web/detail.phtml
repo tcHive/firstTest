@@ -5,7 +5,8 @@
                 <h4 class="card-title"><?php echo $product->getName(); ?></h4>
                 <h6 class="text-muted card-subtitle mb-2"><?php echo $product->getPrice(); ?></h6>
                 <p class="card-text"><?php echo $product->getDescription(); ?></p>
-                <a href="<?php echo Helper::createLink('cart', ['id' => $product->getId()]);?>" class="card-link">Add Cart</a>
+                <a href="<?php echo Helper::createLink('cart', ['id' => $product->getId(),'cart' => 'add']);?>"
+                    class="card-link">Add Cart</a>
                 <a href="<?php echo Helper::createLink('list');?>" class="card-link">Back</a>
             </div>
         </div>

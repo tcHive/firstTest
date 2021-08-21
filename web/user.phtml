@@ -1,20 +1,88 @@
+<?php
+
+    function error_field($title, array $errors) {
+        foreach ($errors as $error) {
+            /* @var $error ValidatorError */
+            if ($error->getSource() == $title) {
+                return ' style="background-color:pink;"';
+            }
+        }
+        return '';
+    }
+?>
 <div class="row">
     <div class="col-12 offset-lg-0">
         <h1 class="text-center">Welcome User</h1>
     </div>
     <div class="col-6 offset-3">
+<?php if (!empty($errors)): ?>
+    <ul class="errors">
+        <?php foreach ($errors as $error): ?>
+            <?php /* @var $error ValidationError */ ?>
+            <li><?php echo $error->getMessage(); ?></li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
         <form target="_self" method="post">
-            <div class="form-group"><input type="text" placeholder="Name"  name="user[name]" class="form-control" /></div>
-            <div class="form-group"><input type="email" name="user[email]" placeholder="Email" class="form-control"  /></div>
-            <div class="form-group"><input type="password" name="user[password]" placeholder="Password" class="form-control form-control"  />
-            <input type="password" name="user[passwordRepeat]" placeholder="Repeat Password" class="form-control form-control" style="  margin-top:10px;" /></div>
-            <div class="form-group"><button class="btn btn-danger float-right" type="submit" style="margin-left:10px;" name="cancel" value="cancel">Cancel</button>
-            <button class="btn btn-success float-right" type="submit" style="margin-right:20px;" name="register" value="register">Register / Login</button></div>
-            <br /><hr /><div class="form-group">
-    <button class="btn btn-outline-secondary" type="submit" name="forgot" value="register">Lost / Reset Password</button></div>
+            <?php
+                if($action ==='register' || $action ==='forgot'):
+            ?>
+            <div class="form-group">
+                <input type="text" placeholder="Name"  name="user[name]" 
+                    class="form-control"<?php echo error_field('name', $errors); ?>/></div>
+            <?php
+                endif;
+            ?>
+            <div class="form-group">
+                <input type="email" name="user[email]" placeholder="Email" 
+                class="form-control"<?php echo error_field('email', $errors); ?> /></div>
+            <?php
+                if($action ==='register' || $action ==='login'):
+            ?>
+            <div class="form-group">
+                <input type="password" name="user[password]" placeholder="Password" 
+                    class="form-control"<?php echo error_field('password', $errors); ?>/>
+                <?php
+                    if($action ==='register'):
+                ?>
+                <input type="password" name="user[passwordRepeat]" placeholder="Repeat Password" 
+                    class="form-control" <?php echo error_field('passwordRepeat', $errors); ?>
+                        style="margin-top:10px;"/>
+                <?php
+                    endif;
+                ?>
+            </div>
+            <?php
+                endif;
+            ?>
+            <div class="form-group">
+                <button class="btn btn-danger float-right" type="submit" style="margin-right:20px;" 
+                    name="cancel" value="cancel">Cancel</button>
+                <button type="submit" style="margin-left:20px;"
+                    <?php
+                        if($action ==='register' || $action ==='login'):
+                    ?>
+                        class="btn btn-success" 
+                    <?php
+                        elseif($action ==='forgot'):
+                    ?>
+                        class="btn btn-outline-secondary"
+                    <?php
+                        endif;
+                    ?>
+                    name="<?php echo $action ?>" 
+                    value="<?php echo $action ?>">
+                    <?php echo ucfirst($action) ?> 
+                </button>
+            </div>
         </form>
     </div>
 </div>
-
-<?php
-
+<style>
+.errors {
+    margin-bottom: 20px;
+}
+.errors li {
+    color: red;
+}
+</style>
