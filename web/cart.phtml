@@ -1,4 +1,7 @@
-<?php if(array_key_exists('cart', $_SESSION)):?>
+<?php
+    unset($products[0]);
+    var_dump($products);
+    if(array_key_exists('cart', $_SESSION)):?>
     <div class="row">
         <div class="col">
             <ul class="list-group"> 
@@ -10,7 +13,7 @@
                         </span>
                         <button class="btn btn-outline-danger float-right" type="button">
                             <a href="<?php echo Helper::createLink('cart', 
-                                ['id' => $product->getId(), 'cart' => 'remove']);?>"
+                                ['id' => $product->getId(), 'cart' => 'delete']);?>"
                                     class="card-link">remove</a>
                         </button>
                     </li>

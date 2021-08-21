@@ -1,43 +1,70 @@
 <?php
-/*
+
+    // user defined cart actions
+    $action = [
+        'add', 'delete', 'view'
+    ];
+
+    $act = Helper::getUrlParam('cart');
+
+    if(! (array_key_exists( 'cart', $_GET) 
+            && in_array( $act, $action))){
+        throw  new NotFoundException("Cart activity not found");
+    }
+
     $cart = new CartDao();
 
-    if(!array_key_exists('cart', $_SESSION) && array_key_exists('cart',$_GET)){
+    if(!array_key_exists('cartId', $_SESSION) 
+        && array_key_exists('cart',$_GET)){
 
-        $_SESSION['cart'] = $cart->create();
+        $_SESSION['cartId'] = $cart->create();
 
-        $cart->inser($_SESSION['cart']);
+        //$cart->inser($_SESSION['cart']);
     }
 
+    if( array_key_exists('id',$_GET) 
+        && $act == 'add'){
 
-    if(array_key_exists('id',$_GET) && array_key_exists('cart',$_GET)){
         $id = Helper::getUrlParam('id');
-
-        $product = $cart->fetch($_SESSION['cart']);
+     
+        $_SESSION['cart'][$id] = $id;
         
-        /*if(!trim($product->product === null)){
-            $product = explode(',',$product->product);
-        }*/
-/*
-        $num = sizeof($product);
-        
-        $product[$num] = $id;
-        $cart->add($product,$_SESSION['cart']);
-    }
-    /*else{
-
-        $product = $cart->fetch($_SESSION['cart']);
-
-    }*/
-/*
-    if(array_key_exists('cart', $_SESSION)){
-        $product = $cart->fetch($_SESSION['cart']);
-        //$product = explode(',',$product->product);
-        var_dump($product);
+        echo 'trying to add';
         /*
-        foreach( $product as $pdt){
-            echo $pdt.'<br />';
-            $products = new ProductDao();
-            $products = $products->selectProperties((int)$pdt);
-        }*/
-    //}
+            $product = $cart->fetch($_SESSION['cart']);
+            
+            if(!trim($product->product === null)){
+                $product = explode(',',$product->product);
+            }
+
+            $num = sizeof($product);
+            
+            $product[$num] = $id;
+            $cart->add($product,$_SESSION['cart']);
+        */
+    }
+
+    if( array_key_exists('id',$_GET) 
+        && $act == 'delete'){
+
+        $id = Helper::getUrlParam('id');
+     
+        if( array_key_exists($id, $_SESSION['cart'])){
+            unset($_SESSION['cart'][$id]);
+        }
+            
+        //$_SESSION['cart'][] = $id;
+    }
+
+    if(array_key_exists('cart', $_SESSION)
+        && $act == 'view'){
+        //$product = $cart->fetch($_SESSION['cart']);
+        //$product = explode(',',$product->product);
+        //var_dump($_SESSION['cart']);
+        
+        $products[] = new Product;
+        foreach( $_SESSION['cart'] as $pdt){
+            $product = new ProductDao();
+            $products[] = $product->selectProperties((int)$pdt);
+        }
+    }

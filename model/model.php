@@ -83,7 +83,7 @@ class Db
 
         if ($stmt->execute($values)) {
 
-                return true;
+            return $this->pdo->lastInsertId();
         } 
             throw new Exception("Failed to save");
     }

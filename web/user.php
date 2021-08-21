@@ -5,13 +5,17 @@
         'register', 'login', 'forgot'
     ];
 
-    if(array_key_exists('view',$_GET) && in_array($_GET['view'],$view)){
-        $action = Helper::getUrlParam('view');
-    }
-    else{
-        throw  new NotFoundException("View not found");
-    }
+    $action = Helper::getUrlParam('view');
 
+    if(! (array_key_exists('view',$_GET) && in_array($action, $view))){
+        throw  new NotFoundException("View not found");  
+    }
+        
+    if( isset($_SESSION['_userId'])){
+        // redirect loged in users
+        // can have a nav class that handles such requests
+
+    }
     // user POST request 
     $errors = [];
 
@@ -28,9 +32,11 @@
         if(empty($errors)){
            
            $user = new UserDao();
-           $user->setProperties($obj);
 
-           echo 'registration good';
+           // returns the last insert Id
+           $_SESSION['_userId'] = $user->setProperties($obj);
+
+           echo '<br />registration good';
         }
     }
     else if(array_key_exists('login', $_POST)){
