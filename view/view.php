@@ -75,7 +75,6 @@ final class ValidatorError {
     private $source;
     private $message;
 
-
     /**
      * Create new validation error.
      * @param mixed $source source of the error
@@ -226,7 +225,6 @@ final class User{
     public function getPassword(){
         return $this->password;
     }
-
 }
 
 /**
@@ -297,53 +295,3 @@ final class Product{
     }
 }
 
-/*
-    interface Cart {
-
-        function add( int $id){
-            if(isset($_SESSION['cart'])){
-
-                $_SESSION['cart'] = $_SESSION['cart']. ','. $id ; 
-            }else{
-
-                $_SESSION['cart'] = $id;
-            }
-        }
-
-        function delete(int $id){
-
-            if(isset($_SESSION['cart'])){
-
-            $cart = explode(',', $_SESSION['cart']);
-
-            $i = 0;
-            foreach ($cart as $key){
-                    if( $key !== $id){
-                        $newCart[$i] = $key;
-                        $i++;
-                    }
-            }
-
-            $_SESSION['cart'] = implode(',', $newCart);
-
-            return true;
-            }else{
-
-            return false;
-            }
-        }
-
-        function checkout(){
-
-            if(isset($_SESSION['cart'])){
-
-                $cart = explode(',', $_SESSION['cart']);
-
-                return $cart;
-            }
-
-            return false;
-
-        }
-    }
-*/
