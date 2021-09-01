@@ -1,27 +1,26 @@
-<div class="row">
-    <div class="col">
+
+    <div class="col-8">
         <h1 class="text-center">Product listing</h1>
         <hr>
-    </div>
-    <div class="col-10 offset-md-1">
+    
+    <div class="col-8 offset-2">
         <ul class="list-group"> 
             <?php foreach($products as $product):?>
                 <li class="list-group-item"> 
-                    <p><button class="btn btn-success float-right" type="button">
-                        <a href="<?php echo Helper::createLink('cart', ['id' => $product->getId(),
-                            'cart' => 'add']);?>" class="card-link" style="marging-left:10px;">add Cart</a>
-                    </button></p>
+                    <?php
+                        echo Cart::button($product->getId());
+                    ?>
                     <span class="text-monospace" style="margin-right:0px;margin-left:15px;">
-                        <p class="text-center"><?php echo $product->getName() ?></p>
-                        <p class="text-center"><?php echo $product->getDescription();?></p> 
+                        <p class="text-center"><?php echo Helper::escape($product->getName()) ?></p>
+                        <p class="text-center"><?php echo Helper::escape($product->getPrice()) ?></p>
                     </span>
-                <p><button class="btn btn-outline-success float-right" type="button">
-                        <a href="<?php echo Helper::createLink('detail', ['id' => $product->getId()]);?>"
+                    <p><a class="btn btn-outline-success float-right" role="button" 
+                        href="<?php echo Helper::createLink('detail', ['id' => $product->getId()]) ?>"
                             class="card-link"  style="marging-right:15px;">Detail</a>
-                    </button></p>
+                    </p>
                     <span class="text-monospace" style="margin-right:0px;margin-left:15px;">
-                        <p class="text-center"><?php echo $product->getPrice() ?></p>
-                        <p class="text-center"><?php echo $product->getTags();?></p> 
+                       
+                        <p class="text-center"><?php echo Helper::escape($product->getDescription()) ?></p> 
                     </span>
                 </li>
             <?php endforeach; ?>

@@ -13,7 +13,7 @@
  /**
   * Assisting methods for the application
   */
-final class Helper{
+final class Helper{ 	
 
     /**
      * Get value of the URL param.
@@ -272,8 +272,46 @@ final class Product{
         }
     }
 
+    public function addEdit( array $pdt){
+        $errors = [];
+
+        if(trim($pdt['name'])){
+            $this->name = $pdt['name'];
+        }
+        else{
+            $errors[] = new ValidatorError('name','name cannot be empty');
+        }
+        if(trim($pdt['price'])){
+            $this->price = $pdt['price'];
+        }
+        else{
+            $errors[] = new ValidatorError('price','price cannot be empty');
+        }
+        if(trim($pdt['description'])){
+            $this->description = $pdt['description'];
+        }
+        else{
+            $errors[] = new ValidatorError('description','description cannot be empty');
+        }
+        if(trim($pdt['tags'])){
+            $this->tags = $pdt['tags'];
+        }
+        else{
+            $errors[] = new ValidatorError('tags','tags cannot be empty');
+        }
+        return $errors;
+    }
+
+    public function setId( int $id){
+        $this->id = $id;
+    }
+    
     public function getId(){
         return $this->id;
+    }
+
+    public function setOwnerId(int $id){
+        $this->ownerId = $id;
     }
 
     public function getOwnerId(){
@@ -297,53 +335,96 @@ final class Product{
     }
 }
 
-/*
-    interface Cart {
+final class Cart {
 
-        function add( int $id){
-            if(isset($_SESSION['cart'])){
+    private static $price = 0;
 
-                $_SESSION['cart'] = $_SESSION['cart']. ','. $id ; 
-            }else{
+    public function __construct(){
+ 
+        $_SESSION['cartId'] = $cart = (new CartDao())->create();
+    }
 
-                $_SESSION['cart'] = $id;
-            }
+    public static function add(){
+        $id = Helper::getUrlParam('id');
+    
+        $_SESSION['cart'][$id] = $id;
+        
+        $page = explode('?', $_SERVER['HTTP_REFERER']);
+        $page = explode('&', @$page[1]);
+        $size = sizeof($page);
+
+        for($i = 0; $i <= $size - 1; $i++){
+            $page[] = explode('=', $page[$i]);
+        }
+        $param = [];
+        for($i = $size+1; $i <= ($size*2)-1; $i++){
+            $param = [$page[$i][0] => $page[$i][1]];
         }
 
-        function delete(int $id){
-
-            if(isset($_SESSION['cart'])){
-
-            $cart = explode(',', $_SESSION['cart']);
-
-            $i = 0;
-            foreach ($cart as $key){
-                    if( $key !== $id){
-                        $newCart[$i] = $key;
-                        $i++;
-                    }
-            }
-
-            $_SESSION['cart'] = implode(',', $newCart);
-
-            return true;
-            }else{
-
-            return false;
-            }
-        }
-
-        function checkout(){
-
-            if(isset($_SESSION['cart'])){
-
-                $cart = explode(',', $_SESSION['cart']);
-
-                return $cart;
-            }
-
-            return false;
-
+        if(! $param == null){
+            Helper::redirect($page[$size][1], $param);
+        }else{
+            Helper::redirect($page[$size][1]);
         }
     }
-*/
+
+    public static function delete(){
+        $id = Helper::getUrlParam('id');
+
+        unset($_SESSION['cart'][$id]);
+        
+        $page = explode('?', $_SERVER['HTTP_REFERER']);
+        $page = explode('&', @$page[1]);
+        $size = sizeof($page);
+
+        for($i = 0; $i <= $size - 1; $i++){
+            $page[] = explode('=', $page[$i]);
+        }
+        $param = [];
+        for($i = $size+1; $i <= ($size*2)-1; $i++){
+            $param = [$page[$i][0] => $page[$i][1]];
+        }
+
+        if(! $param == null){
+            Helper::redirect($page[$size][1], $param);
+        }else{
+            Helper::redirect($page[$size][1]);
+        }
+    }
+
+    public static function view(){
+        $i = 0;
+        $products[] = new Product;
+        foreach( $_SESSION['cart'] as $pdt){
+            $product = new ProductDao();
+            $products[$i++] = $product->selectProperties('id',(int)$pdt);
+        }
+        foreach( $products as $pdt){
+            self::$price += $pdt->getPrice();
+        }
+        return $products;
+    }
+
+    public static function button( int $id){
+
+        if(! @array_key_exists( $id, @$_SESSION['cart'])){
+            return '<p><a class="btn btn-success float-right" type="button" 
+                        href="'.Helper::createLink('cart', ['id'=> $id,'cart' => 'add']).
+                            '" class="card-link" style="marging-left:10px;">add Cart</a></p>';
+        }
+        else{
+            return '<p><a class="btn btn-danger float-right" type="button"
+                        href="'. Helper::createLink('cart', ['id' => $id,'cart' => 'delete']).
+                            '" class="card-link" style="marging-left:10px;">X</a></p>';
+        }
+    }
+
+    public static function count(){
+        
+        return isset($_SESSION['cart'])?sizeof($_SESSION['cart']):0;
+    }
+
+    public static function total(){
+        return self::$price;
+    }
+}

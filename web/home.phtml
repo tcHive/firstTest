@@ -1,9 +1,16 @@
 <h1> home page </h1>
-
-
-
+<hr/>
 <?php
 
+    $handler = new mysqlsessionHandler();
 
+    echo $formatted = date("D d/m/Y H:i:s",$handler->getExpiry());
+
+    $date = new DateTime();
+    $date->format('Y-m-d H:i:s');
+
+    function formatDateTime(DateTime $date) {
+        return $date->format('Y-m-d H:i:s');
+    }
 
 ?>

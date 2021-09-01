@@ -223,7 +223,7 @@ class mysqlsessionHandler extends Db implements SessionHandlerInterface {
 
         $this->conn = $this->connect();
         $this->useTransactions = $useTransactions;
-        $this->expiry = time() + 60 * 60;
+        $this->expiry = time() + 60 * 30;
     }
 
     public function open( $savePath, $name){
@@ -493,21 +493,22 @@ class ProductDao extends Db
         $values = [$pdt->getName(),$pdt->getDescription(), $pdt->getPrice(),
             $pdt->getTags(), $pdt->getId()];
 
+        unset($this->column[0]);
         $result = $this->update($this->tableName, $this->column, $values, $this->col);
 
         return $result;
     }
 
-    function selectProperties( int $where = null){
+    function selectProperties( string $id = null, int $where = null){
 
-        if( $where !== null){
+        if( $where != null){
 
             $values = [$where];
 
             $this->column[5] = $this->col;
 
             $result = $this->select($this->tableName, $this->column,
-                    $this->col,$values);
+                    $id,$values);
 
             $product = new Product();
             $product->setParam($result[0]);

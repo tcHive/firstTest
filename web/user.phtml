@@ -20,7 +20,7 @@
     <ul class="errors">
         <?php foreach ($errors as $error): ?>
             <?php /* @var $error ValidationError */ ?>
-            <li><?php echo $error->getMessage(); ?></li>
+            <li><?php echo Helper::escape($error->getMessage()) ?></li>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>

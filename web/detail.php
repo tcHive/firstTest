@@ -4,7 +4,7 @@
         $id = Helper::getUrlParam('id');
 
         $product = new ProductDao();
-        $product = $product->selectProperties($id);
+        $product = $product->selectProperties('id', $id);
     }
     else{
         throw new NotFoundException("Product identify not found ");

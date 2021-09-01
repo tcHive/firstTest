@@ -1,12 +1,16 @@
-<div class="row">
-    <div class="col">
+<div class="col-8">
+     <h1 class="text-center">Product details</h1> 
+            <hr />
+    <div class="col-8 offset-md-2">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title"><?php echo $product->getName(); ?></h4>
-                <h6 class="text-muted card-subtitle mb-2"><?php echo $product->getPrice(); ?></h6>
-                <p class="card-text"><?php echo $product->getDescription(); ?></p>
-                <a href="<?php echo Helper::createLink('cart', ['id' => $product->getId(),'cart' => 'add']);?>"
-                    class="card-link">Add Cart</a>
+                <h4 class="card-title"><?php echo Helper::escape($product->getName()) ?></h4>
+                <h6 class="text-muted card-subtitle mb-2"><?php echo Helper::escape($product->getPrice()) ?></h6>
+                <p class="card-text"><?php echo Helper::escape($product->getDescription()) ?></p>
+                <p class="text"><?php echo Helper::escape($product->getTags())?></p> 
+                <?php
+                    echo Cart::button($product->getId());
+                ?>
                 <a href="<?php echo Helper::createLink('list');?>" class="card-link">Back</a>
             </div>
         </div>

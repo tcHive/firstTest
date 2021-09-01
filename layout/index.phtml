@@ -21,7 +21,8 @@
                     <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item" role="presentation"><a class="nav-link" href="<?php echo Helper::createLink('list');?>">Shop</a></li>
                         <li class="nav-item" role="presentation"><a class="nav-link" href="#">Second Item</a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="<?php echo Helper::createLink('cart', ['cart' => 'view']);?>"><i class="fa fa-shopping-cart" >Cart</i></a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="<?php echo Helper::createLink('cart', ['cart' => 'view']);?>">
+                            <i class="fa fa-shopping-cart" >Cart <?php if(Cart::count() > 0) echo " <span class='badge badge-pill badge-success float-right'> ". Cart::count()." </span>";?></i></a></li>
                         <li class="dropdown"><a class="dropdown-toggle nav-link dropdown-toggle" 
                             data-toggle="dropdown" aria-expanded="false" href="#">User Option</a>
                             <div class="dropdown-menu" role="menu">
@@ -37,7 +38,7 @@
     </div>
     <div>
         <div class="container">
-            <div class="row justify-content-start">
+            <div class="row">
                 <div class="col-md-4 d-none d-sm-none d-md-inline d-lg-inline d-xl-inline">
                     <div class="wrapper">
                         <!-- Sidebar Holder -->
@@ -96,10 +97,11 @@
                         </nav>
                     </div>
                 </div>
-                <div class="col">
-                    <?php require $template; ?>
-                </div>
-            </div>
+           
+                <?php
+                    require $template;
+                ?>
+             </div>
         </div>
     </div>
     <script src="assets/js/jquery.min.js"></script>
