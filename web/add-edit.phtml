@@ -9,12 +9,11 @@
         return '';
     }
 ?>
-<div class="row">
     <div class="col-12 offset-lg-0">
         <h1 class="text-center"><?php echo Helper::escape(ucfirst($action)) ?> Product</h1>
         <hr>
     </div>
-    <div class="col-6 offset-3">
+    <div class="col-md-6 offset-md-3">
 <?php if (!empty($errors)): ?>
     <ul class="errors">
         <?php foreach ($errors as $error): ?>
@@ -61,7 +60,6 @@
             </div>
         </form>
     </div>
-</div>
 <style>
 .errors {
     margin-bottom: 20px;

@@ -1,5 +1,4 @@
 <?php
-
     // user template setup
     $view = [
         'register', 'login', 'forgot'
@@ -10,15 +9,13 @@
     if(! (array_key_exists('view',$_GET) && in_array($action, $view))){
         throw  new NotFoundException("View not found");  
     }
-        
-    if( isset($_SESSION['_userId'])){
-        // redirect loged in users
+    // redirect loged in users
+    if( isset($_SESSION['_userId'])){ 
         // can have a nav class that handles such requests
 
     }
     // user POST request 
     $errors = [];
-
     if(array_key_exists('register', $_POST)){
         $data = [
             'name' => isset($_POST['user']['name'])?$_POST['user']['name'] :'',
@@ -40,7 +37,6 @@
         }
     }
     else if(array_key_exists('login', $_POST)){
-
         $data = [
             'email' => isset($_POST['user']['email'])?$_POST['user']['email'] :'',
             'password' => isset($_POST['user']['password'])?$_POST['user']['password'] :''
@@ -63,7 +59,6 @@
         }
     }
     else if( array_key_exists('forgot', $_POST)){
-
         $data = [
             'name' => isset($_POST['user']['name'])?$_POST['user']['name'] :'',
             'email' => isset($_POST['user']['email'])?$_POST['user']['email'] :''
@@ -83,4 +78,7 @@
                 echo 'welcome';
             }
         }
+    }
+    else if( array_key_exists('cancel', $_POST)){
+        Helper::redirect('.');
     }

@@ -1,18 +1,16 @@
-<h1> home page </h1>
+<div class="col-md-8">
+<h1 class="text-center"> home page </h1>
+<p class="text-right"><?php  echo $formatted = date("D d/m/Y H:i:s",(new mysqlsessionHandler())->getExpiry()) ?></p>
 <hr/>
 <?php
 
-    $handler = new mysqlsessionHandler();
-
-    echo $formatted = date("D d/m/Y H:i:s",$handler->getExpiry());
+   
 
     $date = new DateTime();
-    $date->format('Y-m-d H:i:s');
+    echo $date->format('Y-m-d H:i:s');
 
     function formatDateTime(DateTime $date) {
         return $date->format('Y-m-d H:i:s');
     }
-
-    var_dump($_SERVER);
-
 ?>
+</div>

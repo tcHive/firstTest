@@ -1,7 +1,7 @@
-<div class="col-8">
+<div class="col-md-8">
     <h1 class="text-center"> Shop Centre</h1>
         <hr>
-    <div class="col-10 offset-1">
+    <div class="col-md-10 offset-md-1">
         <div class="card-group">
             <div class=" card">
                 <div class="card-body">
@@ -16,9 +16,10 @@
                             number of int
                         </p>
                         <a class="btn btn-outline-success float-left"
-                        role="button" href="#">View Uploads</a>
+                            role="button" href="<?php echo 
+                                Helper::createLink('dash',['view'=>'list'])?>">View Uploads</a>
                         <a class="btn btn-success float-right"
-                        role="button" href="#">Add Item</a>
+                            role="button" href="<?php echo Helper::createLink('add-edit')?>">Add Item</a>
                 </div>
             </div>
         </div>
