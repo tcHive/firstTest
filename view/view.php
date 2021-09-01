@@ -75,7 +75,6 @@ final class ValidatorError {
     private $source;
     private $message;
 
-
     /**
      * Create new validation error.
      * @param mixed $source source of the error
@@ -226,7 +225,6 @@ final class User{
     public function getPassword(){
         return $this->password;
     }
-
 }
 
 /**
