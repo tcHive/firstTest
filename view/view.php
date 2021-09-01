@@ -45,7 +45,7 @@ final class Helper{
      */
     public static function createLink($page, array $params = []) {
         unset($params['page']);
-        return '?'.http_build_query(array_merge(['page' => $page], $params));
+        return (empty($params))?$page :$page.'&'.http_build_query($params);
     }
 
     /**
@@ -348,9 +348,11 @@ final class Cart {
         $id = Helper::getUrlParam('id');
     
         $_SESSION['cart'][$id] = $id;
-        
-        $page = explode('?', $_SERVER['HTTP_REFERER']);
-        $page = explode('&', @$page[1]);
+
+        Helper::redirect('list');
+
+        //$page = explode('?', $_SERVER['HTTP_REFERER']);
+        /*$page = explode('&', @$page[1]);
         $size = sizeof($page);
 
         for($i = 0; $i <= $size - 1; $i++){
@@ -362,17 +364,19 @@ final class Cart {
         }
 
         if(! $param == null){
-            Helper::redirect($page[$size][1], $param);
+            Helper::redirect($page[$size][0], $param);
         }else{
-            Helper::redirect($page[$size][1]);
-        }
+            Helper::redirect($page[$size][0]);
+        }*/
     }
 
     public static function delete(){
         $id = Helper::getUrlParam('id');
 
         unset($_SESSION['cart'][$id]);
-        
+
+        Helper::redirect('list');
+        /*
         $page = explode('?', $_SERVER['HTTP_REFERER']);
         $page = explode('&', @$page[1]);
         $size = sizeof($page);
@@ -389,7 +393,7 @@ final class Cart {
             Helper::redirect($page[$size][1], $param);
         }else{
             Helper::redirect($page[$size][1]);
-        }
+        }*/
     }
 
     public static function view(){
