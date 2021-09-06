@@ -1,5 +1,4 @@
 <?php
-
     function error_field($title, array $errors) {
         foreach ($errors as $error) {
             /* @var $error ValidatorError */
@@ -10,63 +9,47 @@
         return '';
     }
 ?>
-    <div class="col-md-8 offset-lg-0">
-        <h1 class="text-center">Welcome User</h1>
+    <div class="col-8 offset-lg-0">
+        <h1 class="text-center"><?php echo Helper::escape(ucfirst($action)) ?> Product</h1>
         <hr>
     
-    <div class="col-10 col-md-6 offset-1 offset-md-3">
+    <div class="col-md-6 offset-md-3">
 <?php if (!empty($errors)): ?>
     <ul class="errors">
         <?php foreach ($errors as $error): ?>
             <?php /* @var $error ValidationError */ ?>
-            <li><?php echo Helper::escape($error->getMessage()) ?></li>
+            <li><?php echo $error->getMessage(); ?></li>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
         <form target="_self" method="post">
-            <?php
-                if($action ==='register' || $action ==='forgot'):
-            ?>
             <div class="form-group">
-                <input type="text" placeholder="Name"  name="user[name]" 
+                <input type="text" placeholder="Name"  name="product[name]" value="<?php echo isset($pdt)?$pdt->getName() :'' ?>"
                     class="form-control"<?php echo error_field('name', $errors); ?>/></div>
-            <?php
-                endif;
-            ?>
             <div class="form-group">
-                <input type="email" name="user[email]" placeholder="Email" 
-                class="form-control"<?php echo error_field('email', $errors); ?> /></div>
-            <?php
-                if($action ==='register' || $action ==='login'):
-            ?>
+                <input type="number" name="product[price]" min="1" placeholder="Price" 
+                    value="<?php echo isset($pdt)?$pdt->getPrice() :'' ?>"
+                        class="form-control" <?php echo error_field('price', $errors); ?> /></div>
             <div class="form-group">
-                <input type="password" name="user[password]" placeholder="Password" 
-                    class="form-control"<?php echo error_field('password', $errors); ?>/>
-                <?php
-                    if($action ==='register'):
-                ?>
-                <input type="password" name="user[passwordRepeat]" placeholder="Repeat Password" 
-                    class="form-control" <?php echo error_field('passwordRepeat', $errors); ?>
-                        style="margin-top:10px;"/>
-                <?php
-                    endif;
-                ?>
+                <textarea type="text" name="product[description]" placeholder="Description" 
+                    class="form-control" <?php echo error_field('description', $errors); ?>
+                    ><?php echo isset($pdt)?$pdt->getDescription() :'' ?></textarea>
+                <textarea type="text" name="product[tags]" placeholder="Tags if more than 1 seperate with ','" 
+                    class="form-control" <?php echo error_field('tags', $errors); ?> 
+                        style="margin-top:10px;"><?php echo isset($pdt)?$pdt->getTags() :'' ?></textarea>
             </div>
-            <?php
-                endif;
-            ?>
             <div class="form-group">
                 <button class="btn btn-danger float-right" type="submit" style="margin-right:20px;" 
                     name="cancel" value="cancel">Cancel</button>
                 <button type="submit" style="margin-left:20px;"
                     <?php
-                        if($action ==='register' || $action ==='login'):
+                        if($action ==='add'):
                     ?>
                         class="btn btn-success" 
                     <?php
-                        elseif($action ==='forgot'):
+                        elseif($action ==='edit'):
                     ?>
-                        class="btn btn-outline-secondary"
+                        class="btn btn-success"
                     <?php
                         endif;
                     ?>

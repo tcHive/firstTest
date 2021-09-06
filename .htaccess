@@ -1,0 +1,10 @@
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php?page=$1
+
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_FILENAME}\.php -f
+#RewriteRule ^(.*)$ index.php
+#RewriteRule ^index\(.*)$ /index/?page=$1
+#ErrorDocument 404 /index?page=404

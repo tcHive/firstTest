@@ -13,7 +13,7 @@
  /**
   * Assisting methods for the application
   */
-final class Helper{
+final class Helper{ 	
 
     /**
      * Get value of the URL param.
@@ -45,7 +45,7 @@ final class Helper{
      */
     public static function createLink($page, array $params = []) {
         unset($params['page']);
-        return '?'.http_build_query(array_merge(['page' => $page], $params));
+        return (empty($params))?$page :$page.'&'.http_build_query($params);
     }
 
     /**
@@ -68,6 +68,41 @@ final class Helper{
 }
 
 /**
+ * Validation error.
+ */
+final class ValidatorError {
+
+    private $source;
+    private $message;
+
+    /**
+     * Create new validation error.
+     * @param mixed $source source of the error
+     * @param string $message error message
+     */
+    function __construct($source, $message) {
+        $this->source = $source;
+        $this->message = $message;
+    }
+
+    /**
+     * Get source of the error.
+     * @return mixed source of the error
+     */
+    public function getSource() {
+        return $this->source;
+    }
+
+    /**
+     * Get error message.
+     * @return string error message
+     */
+    public function getMessage() {
+        return $this->message;
+    }
+}
+
+/**
  * User class Api
  */
 final class User{
@@ -81,23 +116,98 @@ final class User{
 
     }
 
-    public function setParam( array $user){
+    public function setParam(stdClass $user){
 
         if(array_key_exists('id', $user)){
             $this->id = $user->id;
         }
 
         if(array_key_exists('name', $user)){
-            $this->name = $user['name'];
+            $this->name = $user->name;
         }
 
         if(array_key_exists('email', $user)){
-            $this->email = $user['email'];
+            $this->email = $user->email;
         }
 
         if(array_key_exists('password', $user)){
+            $this->password = $user->password;
+        }
+    }
+
+    public function register( array $user){
+        $errors = [];
+
+        if(trim($user['name'])){
+            $this->name = $user['name'];
+        }
+        else{
+            $errors[] = new ValidatorError('name','name cannot be empty');
+        }
+
+        if(trim($user['email'])){
+            $this->email = $user['email'];
+        }
+        else{
+            $errors[] = new ValidatorError('email','email cannot be empty');
+        }
+
+        if(trim($user['password'])){
             $this->password = $user['password'];
         }
+        else{
+            $errors[] = new ValidatorError('password','password cannot be empty');
+        }
+        
+        if(trim($user['password2'])){
+            if($user['password2'] != $this->password){
+                $errors[] = new ValidatorError('Password Match','Password and passwordRepeat must match');
+            }
+        }
+        else{
+            $errors[] = new ValidatorError('passwordRepeat','passwordRepeat cannot be empty');
+        }
+        
+        return $errors;
+    }
+
+    public function login( array $user){
+        $errors = [];
+
+        if(trim($user['email'])){
+            $this->email = $user['email'];
+        }
+        else{
+            $errors[] = new ValidatorError('email','email cannot be empty');
+        }
+
+        if(trim($user['password'])){
+            $this->password = $user['password'];
+        }
+        else{
+            $errors[] = new ValidatorError('password','password cannot be empty');
+        }
+
+        return $errors;
+    }
+
+    public function forgot( array $user){
+        $errors = [];
+        if(trim($user['name'])){
+            $this->name = $user['name'];
+        }
+        else{
+            $errors[] = new ValidatorError('name','name cannot be empty');
+        }
+
+        if(trim($user['email'])){
+            $this->email = $user['email'];
+        }
+        else{
+            $errors[] = new ValidatorError('email','email cannot be empty');
+        }
+
+        return $errors;
     }
 
     public function getId(){
@@ -115,7 +225,6 @@ final class User{
     public function getPassword(){
         return $this->password;
     }
-
 }
 
 /**
@@ -134,7 +243,7 @@ final class Product{
 
     }
 
-    public function setParam( $product){
+    public function setParam(stdClass $product){
 
         if(array_key_exists('id', $product)){
             $this->id = $product->id;
@@ -161,8 +270,46 @@ final class Product{
         }
     }
 
+    public function addEdit( array $pdt){
+        $errors = [];
+
+        if(trim($pdt['name'])){
+            $this->name = $pdt['name'];
+        }
+        else{
+            $errors[] = new ValidatorError('name','name cannot be empty');
+        }
+        if(trim($pdt['price'])){
+            $this->price = $pdt['price'];
+        }
+        else{
+            $errors[] = new ValidatorError('price','price cannot be empty');
+        }
+        if(trim($pdt['description'])){
+            $this->description = $pdt['description'];
+        }
+        else{
+            $errors[] = new ValidatorError('description','description cannot be empty');
+        }
+        if(trim($pdt['tags'])){
+            $this->tags = $pdt['tags'];
+        }
+        else{
+            $errors[] = new ValidatorError('tags','tags cannot be empty');
+        }
+        return $errors;
+    }
+
+    public function setId( int $id){
+        $this->id = $id;
+    }
+    
     public function getId(){
         return $this->id;
+    }
+
+    public function setOwnerId(int $id){
+        $this->ownerId = $id;
     }
 
     public function getOwnerId(){
@@ -186,53 +333,100 @@ final class Product{
     }
 }
 
-/*
-    interface Cart {
+final class Cart {
 
-        function add( int $id){
-            if(isset($_SESSION['cart'])){
+    private static $price = 0;
 
-                $_SESSION['cart'] = $_SESSION['cart']. ','. $id ; 
-            }else{
+    public function __construct(){
+ 
+        $_SESSION['cartId'] = $cart = (new CartDao())->create();
+    }
 
-                $_SESSION['cart'] = $id;
-            }
+    public static function add(){
+        $id = Helper::getUrlParam('id');
+    
+        $_SESSION['cart'][$id] = $id;
+
+        Helper::redirect('list');
+
+        //$page = explode('?', $_SERVER['HTTP_REFERER']);
+        /*$page = explode('&', @$page[1]);
+        $size = sizeof($page);
+
+        for($i = 0; $i <= $size - 1; $i++){
+            $page[] = explode('=', $page[$i]);
+        }
+        $param = [];
+        for($i = $size+1; $i <= ($size*2)-1; $i++){
+            $param = [$page[$i][0] => $page[$i][1]];
         }
 
-        function delete(int $id){
+        if(! $param == null){
+            Helper::redirect($page[$size][0], $param);
+        }else{
+            Helper::redirect($page[$size][0]);
+        }*/
+    }
 
-            if(isset($_SESSION['cart'])){
+    public static function delete(){
+        $id = Helper::getUrlParam('id');
 
-            $cart = explode(',', $_SESSION['cart']);
+        unset($_SESSION['cart'][$id]);
 
-            $i = 0;
-            foreach ($cart as $key){
-                    if( $key !== $id){
-                        $newCart[$i] = $key;
-                        $i++;
-                    }
-            }
+        Helper::redirect('list');
+        /*
+        $page = explode('?', $_SERVER['HTTP_REFERER']);
+        $page = explode('&', @$page[1]);
+        $size = sizeof($page);
 
-            $_SESSION['cart'] = implode(',', $newCart);
-
-            return true;
-            }else{
-
-            return false;
-            }
+        for($i = 0; $i <= $size - 1; $i++){
+            $page[] = explode('=', $page[$i]);
+        }
+        $param = [];
+        for($i = $size+1; $i <= ($size*2)-1; $i++){
+            $param = [$page[$i][0] => $page[$i][1]];
         }
 
-        function checkout(){
+        if(! $param == null){
+            Helper::redirect($page[$size][1], $param);
+        }else{
+            Helper::redirect($page[$size][1]);
+        }*/
+    }
 
-            if(isset($_SESSION['cart'])){
+    public static function view(){
+        $i = 0;
+        $products[] = new Product;
+        foreach( $_SESSION['cart'] as $pdt){
+            $product = new ProductDao();
+            $products[$i++] = $product->selectProperties('id',(int)$pdt);
+        }
+        foreach( $products as $pdt){
+            self::$price += $pdt->getPrice();
+        }
+        return $products;
+    }
 
-                $cart = explode(',', $_SESSION['cart']);
+    public static function button( int $id){
 
-                return $cart;
-            }
-
-            return false;
-
+        if(! @array_key_exists( $id, @$_SESSION['cart'])){
+            return '<p><a class="btn btn-success float-right" type="button" 
+                        href="'.Helper::createLink('cart', ['id'=> $id,'cart' => 'add']).
+                            '" class="card-link" style="marging-left:10px;">add Cart</a></p>';
+        }
+        else{
+            return '<p><a class="btn btn-danger float-right" type="button"
+                        href="'. Helper::createLink('cart', ['id' => $id,'cart' => 'delete']).
+                            '" class="card-link" style="marging-left:10px;">X</a></p>';
         }
     }
-*/
+
+    public static function count(){
+        
+        return isset($_SESSION['cart'])?sizeof($_SESSION['cart']):0;
+    }
+
+    public static function total(){
+        return self::$price;
+    }
+}

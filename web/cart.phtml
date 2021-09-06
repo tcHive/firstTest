@@ -1,23 +1,29 @@
-<?php if(array_key_exists('cart', $_SESSION)):?>
-<div class="row">
-    <div class="col">
-        <ul class="list-group"> <?php foreach($products as $product):?>
-            <li class="list-group-item">
-            <span class="text-monospace" style="margin-right:0px;margin-left:15px;">
-                <p><?php echo $product->getName() ?></p>
-                <p><?php echo $product->getDescription();?></p>
-            </span>
-            <button class="btn btn-outline-success float-right" type="button">
-                <a href="<?php echo Helper::createLink('cart', ['id' => $product->getId()]);?>" class="card-link">add Cart</a>
-            </button>
-            <button class="btn btn-outline-success float-right" type="button">
-                <a href="<?php echo Helper::createLink('detail', ['id' => $product->getId()]);?>" class="card-link">Detail</a>
-            </button>
-            
-        </li><?php endforeach; ?>
-        </ul>
-    </div>
+<div class="col-md-8">
+<?php
+    if(array_key_exists('cart', $_SESSION) && (Cart::count() > 0)):?>
+    <h1 class="text-center">Cart details</h1> 
+        <hr />
+       <h3 class="text-right"> Total<?php echo ' '.Cart::total() ?> </h3>
+            <div class="col-md-9 offset-md-2">
+                <ul class="list-group"> 
+                    <?php foreach($products as $product):?>
+                        <li class="list-group-item">
+                            <span class="text-monospace" style="margin-right:0px;margin-left:15px;">
+                                <p><?php echo Helper::escape($product->getName()) ?></p>
+                                <p><?php echo Helper::escape($product->getDescription())?></p>
+                            </span>
+                                <a class="btn btn-outline-danger float-right"  type="button"
+                                    href="<?php echo Helper::createLink('cart', 
+                                        ['id' => $product->getId(), 'cart' => 'delete']);?>"
+                                            alt="remove from cart" class="card-link">X</a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+<?php 
+    else:?>
+        <h1 class="text-center"> Cart Empty </h1>
+<?php 
+    endif;
+?>
 </div>
-<?php else:?>
-    <h1> Cart Empty </h1>
-<?php endif?>

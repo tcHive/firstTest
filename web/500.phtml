@@ -1,7 +1,9 @@
-<h1>SERVER ERROR</h1>
-
-<p class="p">Internal server error occured.</p>
-<p class="p">
-    <i>More information (<b>should be hidden on production server</b>):</i><br />
-    <?php echo $extra['message'] ?>
-</p>
+<div class="col-md-8">
+    <h1 class="text-center">SERVER ERROR</h1>
+    <hr>
+    <p class="p text-center">Internal server error occured.</p>
+    <p class="p text-center">
+        <i>More information (<b>should be hidden on production server</b>):</i><br />
+        <?php echo Helper::escape($extra['message']) ?>
+    </p>
+</div>

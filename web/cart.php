@@ -1,42 +1,27 @@
 <?php
 
-    $cart = new CartDao();
+    // user defined cart actions
+    $action = [
+        'add', 'delete'
+    ];
 
-    if(!array_key_exists('cart', $_SESSION) && array_key_exists('add',$_GET)){
+    if(array_key_exists('cart', $_GET))
+        $act = Helper::getUrlParam('cart');
 
-        $_SESSION['cart'] = $cart->create();
-
-        $cart->inser($_SESSION['cart']);
+    if(isset($act) && ! in_array( $act, $action)){
+        throw  new NotFoundException("Cart activity not found");
     }
-
-
-    if(array_key_exists('id',$_GET)){
-        $id = Helper::getUrlParam('id');
-
-        $product = $cart->fetch($_SESSION['cart']);
-        
-        if(!trim($product->product === null)){
-            $product = explode(',',$product->product);
-        }
-        $num = sizeof($product);
-        
-        $product[$num] = $id;
-        $cart->add($product,$_SESSION['cart']);
+        // enable the cart variable at specific instance
+        // rather than wen user enters application
+    if(! array_key_exists('cartId', $_SESSION)){
+        new Cart();
     }
-    /*else{
-
-        $product = $cart->fetch($_SESSION['cart']);
-
-    }*/
-
-    if(array_key_exists('cart', $_SESSION)){
-        $product = $cart->fetch($_SESSION['cart']);
-        $product = explode(',',$product->product);
-        var_dump($product);
-        
-        foreach( $product as $pdt){
-            echo $pdt.'<br />';
-            $products = new ProductDao();
-            $products = $products->selectProperties((int)$pdt);
-        }
+    if( array_key_exists('id',$_GET) && @$act == 'add'){
+        Cart::add();
+    }
+    if( array_key_exists('id',$_GET) && @$act == 'delete'){
+        Cart::delete();
+    }
+    if( array_key_exists('cart', $_SESSION)){
+       $products = Cart::view();
     }
