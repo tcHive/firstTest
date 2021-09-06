@@ -11,7 +11,7 @@
                         echo Cart::button($product->getId());
                     ?>
                     <span class="text-monospace" style="margin-right:0px;margin-left:15px;">
-                        <p class="text-center"><?php echo Helper::escape($product->getName()) ?></p>
+                        <p class="text-center"><?php echo Helper::escape($product->getOwnerId()) ?></p>
                         <p class="text-center"><?php echo Helper::escape($product->getPrice()) ?></p>
                     </span>
                     <p><a class="btn btn-outline-success float-right" role="button" 
