@@ -110,7 +110,7 @@ class Db
             $string = implode(',', $columns);
 
         $sql = "
-                UPDATE $tableName SET  $string WHERE $where = ?
+                UPDATE $tableName SET $string WHERE $where = ?
             ";
 
             $stmt = $this->pdo->prepare($sql);
@@ -152,11 +152,12 @@ class Db
             $stmt->execute($values);
             $num = $stmt->rowCount();
 
-            if ( $num > 0  && $num < 2) {
+            if ( $num > 0 ) {
               
                 return $row = $stmt->fetchAll();
             }
-                throw new NotFoundException("Failed to retrive record");
+            
+            throw new NotFoundException("Failed to retrive record");
 
         } else {
                 
@@ -167,7 +168,8 @@ class Db
             
                 return $row = $stmt->fetchAll();
             }
-                throw new NotFoundException("Failed to retrive records");
+            
+            throw new NotFoundException("Failed to retrive records");
         }
     }
 
@@ -490,10 +492,9 @@ class ProductDao extends Db
 
     function updateProperties( Product $pdt){
 
-        $values = [$pdt->getName(),$pdt->getDescription(), $pdt->getPrice(),
+        $values = [$pdt->getOwnerId(),$pdt->getName(),$pdt->getDescription(), $pdt->getPrice(),
             $pdt->getTags(), $pdt->getId()];
 
-        unset($this->column[0]);
         $result = $this->update($this->tableName, $this->column, $values, $this->col);
 
         return $result;

@@ -1,8 +1,10 @@
 <?php
 // product template setup
-if( array_key_exists('id', $_GET)){
+$id = Helper::urlArg();
 
-    $id = Helper::getUrlParam('id');
+if(isset($id[1]) && is_numeric($id[1]) && $id[1] > 0){
+
+    $id = $id[1];
     $action = 'edit';
 
     $pdt = new Product;
@@ -24,15 +26,15 @@ if( array_key_exists('add', $_POST)){
         ];
 
     $pdt = new Product();
-    //$pdt->setOwnerId($_SESSION['_userId']);
+    $pdt->setOwnerId(9);
     $errors = $pdt->addEdit($data);
-    /*
+    
     if( empty($errors)){
         $product = new ProductDao();
         $id = $product->setProperties($pdt);
 
-        Helper::redirect('detail', ['id' => '$id']);
-    }*/
+        Helper::redirect('detail', [$id]);
+    }
 }
 elseif( array_key_exists('edit', $_POST)){
 
@@ -43,13 +45,15 @@ elseif( array_key_exists('edit', $_POST)){
         'tags' => isset($_POST['product']['tags'])?$_POST['product']['tags'] :''
     ];
 
-    $pdt = new product();
-    $pdt->setId($id);
+    $product = new ProductDao();
+    $pdt = $product->selectProperties('id', $id);
     $errors = $pdt->addEdit($data);
-/*
+
     if( empty($errors)){
         $product = new ProductDao();
         $product->updateProperties($pdt);
-    }*/
+
+        Helper::redirect('detail', [$id]);
+    }
 }
 

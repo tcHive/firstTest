@@ -1,29 +1,35 @@
 
-    <div class="col-md-8">
-        <h1 class="text-center">Product listing</h1>
+<div class="col-md-8">
+    <h1 class="text-center">Product listing</h1>
         <hr>
-    
-    <div class="col-md-8 offset-md-2">
-        <ul class="list-group"> 
-            <?php foreach($products as $product):?>
+    <div class="row">
+        <?php foreach($products as $product):?>
+        <div class="col-md-4 offset-md-2">
+            <ul class="list-group"> 
                 <li class="list-group-item"> 
                     <?php
                         echo Cart::button($product->getId());
                     ?>
-                    <span class="text-monospace" style="margin-right:0px;margin-left:15px;">
-                        <p class="text-center"><?php echo Helper::escape($product->getOwnerId()) ?></p>
+                    <span class="text-monospace" style="margin-right:20px;margin-left:15px;">
+                        <p class="text-center"><?php echo Helper::escape($product->getName()) ?></p>
                         <p class="text-center"><?php echo Helper::escape($product->getPrice()) ?></p>
                     </span>
-                    <p><a class="btn btn-outline-success float-right" role="button" 
-                        href="<?php echo Helper::createLink('detail', ['id' => $product->getId()]) ?>"
-                            class="card-link"  style="marging-right:15px;">Detail</a>
-                    </p>
+                   
                     <span class="text-monospace" style="margin-right:0px;margin-left:15px;">
                        
                         <p class="text-center"><?php echo Helper::escape($product->getDescription()) ?></p> 
                     </span>
+                    <span class="text-monospace" style="margin-right:0px;margin-left:15px;">
+                       
+                        <p class="text-center"><?php echo Helper::escape($product->getTags()) ?></p> 
+                    </span>
+                    <p><a class="btn btn-outline-success float-right" role="button" 
+                        href="<?php echo Helper::createLink('detail', [$product->getId()]) ?>"
+                            class="card-link"  style="margin-right:15px;">Detail</a>
+                    </p>
                 </li>
-            <?php endforeach; ?>
-        </ul>
+            </ul>
+        </div>
+        <?php endforeach; ?>
     </div>
 </div>

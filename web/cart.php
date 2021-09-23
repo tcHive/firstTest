@@ -5,10 +5,9 @@
         'add', 'delete'
     ];
 
-    if(array_key_exists('cart', $_GET))
-        $act = Helper::getUrlParam('cart');
-
-    if(isset($act) && ! in_array( $act, $action)){
+        $act = Helper::urlArg();
+  
+    if(isset($act[2]) && !  in_array( $act[2], $action)){
         throw  new NotFoundException("Cart activity not found");
     }
         // enable the cart variable at specific instance
@@ -16,12 +15,13 @@
     if(! array_key_exists('cartId', $_SESSION)){
         new Cart();
     }
-    if( array_key_exists('id',$_GET) && @$act == 'add'){
-        Cart::add();
+    if( isset($act[1]) && is_numeric($act[1]) && $act[1] > 0 ){
+        if(in_array('add', $act))
+            Cart::add($act[1]);
+        elseif( in_array('delete', $act)) 
+            Cart::delete($act[1]);
     }
-    if( array_key_exists('id',$_GET) && @$act == 'delete'){
-        Cart::delete();
-    }
-    if( array_key_exists('cart', $_SESSION)){
-       $products = Cart::view();
-    }
+   
+    if( Cart::count() > 0)
+        $products = Cart::view();
+    

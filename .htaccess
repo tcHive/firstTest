@@ -1,10 +1,16 @@
 RewriteEngine on
-RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ index.php?page=$1
+
+#RewriteRule ^/(user)/([a-z]+)$ index.php?page=$1&view=$2 [L]
+#RewriteRule ^/(add-edit)/([0-9]+)$ index.php?page=$1&id=$2 [L]
+#RewriteRule ^/(detail)/([0-9]+)$ index.php?page=$1&id=$2 [L]
+#RewriteRule ^/(list) index.php?page=$1 [L]
+
+RewriteRule ^(.*)$ index.php?$1
 
 #RewriteCond %{REQUEST_FILENAME} !-d
 #RewriteCond %{REQUEST_FILENAME}\.php -f
 #RewriteRule ^(.*)$ index.php
 #RewriteRule ^index\(.*)$ /index/?page=$1
-#ErrorDocument 404 /index?page=404
+#ErrorDocument 404 /localhost/firstTest/index.php?page=404

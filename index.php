@@ -9,26 +9,6 @@
  * @link        https://revtech.co.za
  */
 
-/*
-    require "user.php";
-
-    $user = new user();
-
-    var_dump($user->selectProperties('mike@example.com'));
-
-    echo '-----------------------------';
-
-    $play = $user->selectProperties('mike@example.com');
-
-    foreach( $play as $playr):
-
-      if(array_key_exists('name', $playr)){
-        echo $playr->name." \n";
-      }
-
-    endforeach;
-*/
-
 /**
  * Exception which causes HTTP ERROR 404 (Not Found).
  */
@@ -129,8 +109,9 @@ final class Index{
    */
   private function getPage() {
     $page = self::DEFAULT_PAGE;
-    if (array_key_exists('page', $_GET)) {
-      $page = $_GET['page'];
+    if (Helper::urlArg() != null) {
+      $page = Helper::urlArg();
+      return $this->checkPage($page[0]);
     }
     return $this->checkPage($page);
   }
@@ -187,5 +168,5 @@ final class Index{
   }
 }
 
-$index = new Index();
-$index->run();
+  (new Index())
+        ->run();

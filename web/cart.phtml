@@ -25,5 +25,29 @@
         <h1 class="text-center"> Cart Empty </h1>
 <?php 
     endif;
+
+    $name = [
+        'user','list','detail','dash','cart'
+    ];
+
+    $key = null;
+
+    $page = explode('/',preg_replace(Helper::base(),'',$_SERVER['HTTP_REFERER']));
+
+    $i = 1;
+
+    foreach( $name as $var){
+        $key = array_search($var, $page);
+        if($key != null){
+            break;
+        }
+    }
+
+    echo $key;
+
+    
+
+
+    var_dump($page);
 ?>
 </div>

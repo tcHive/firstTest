@@ -15,16 +15,20 @@
   */
 final class Helper{ 	
 
+    public static function base(){
+        return preg_replace('/index.php/', '', $_SERVER['PHP_SELF']);
+    }
     /**
-     * Get value of the URL param.
-     * @return string parameter value
-     * @throws NotFoundException if the param is not found in the URL
+     * Get value of the URL arguments.
+     * @return array|null parameter value
      */
-    public static function getUrlParam($name) {
-        if (!array_key_exists($name, $_GET)) {
-            throw new NotFoundException('URL parameter "' . $name . '" not found.');
+    public static function urlArg(){
+        if(! empty($_SERVER['QUERY_STRING'])){
+            $arg = explode('/',$_SERVER['QUERY_STRING']);
+
+            return $arg;
         }
-        return $_GET[$name];
+        return null;
     }
 
     /**
@@ -44,8 +48,12 @@ final class Helper{
      * @return 
      */
     public static function createLink($page, array $params = []) {
-        unset($params['page']);
-        return (empty($params))?$page :$page.'&'.http_build_query($params);
+        //unset($params['page']);
+        if(empty($params)){
+            return Helper::base().$page;
+        }else{
+            return Helper::base().$page.'/'.implode('/', $params);
+        }
     }
 
     /**
@@ -339,59 +347,28 @@ final class Cart {
 
     public function __construct(){
  
-        $_SESSION['cartId'] = $cart = (new CartDao())->create();
+        $_SESSION['cartId'] = (new CartDao())
+                                ->create();
     }
 
-    public static function add(){
-        $id = Helper::getUrlParam('id');
+    public static function add(int $id){
     
         $_SESSION['cart'][$id] = $id;
 
+        $page = explode('/',preg_replace(Helper::base(),'',$_SERVER['HTTP_REFERER']));
+
         Helper::redirect('list');
-
-        //$page = explode('?', $_SERVER['HTTP_REFERER']);
-        /*$page = explode('&', @$page[1]);
-        $size = sizeof($page);
-
-        for($i = 0; $i <= $size - 1; $i++){
-            $page[] = explode('=', $page[$i]);
-        }
-        $param = [];
-        for($i = $size+1; $i <= ($size*2)-1; $i++){
-            $param = [$page[$i][0] => $page[$i][1]];
-        }
-
-        if(! $param == null){
-            Helper::redirect($page[$size][0], $param);
-        }else{
-            Helper::redirect($page[$size][0]);
-        }*/
     }
 
-    public static function delete(){
-        $id = Helper::getUrlParam('id');
+    public static function delete(int $id){
 
         unset($_SESSION['cart'][$id]);
 
+        $page = explode('/',preg_replace(Helper::base(),'',$_SERVER['HTTP_REFERER']));
+        if(in_array('cart', $page) && self::count() > 0)
+            Helper::redirect('cart');
+
         Helper::redirect('list');
-        /*
-        $page = explode('?', $_SERVER['HTTP_REFERER']);
-        $page = explode('&', @$page[1]);
-        $size = sizeof($page);
-
-        for($i = 0; $i <= $size - 1; $i++){
-            $page[] = explode('=', $page[$i]);
-        }
-        $param = [];
-        for($i = $size+1; $i <= ($size*2)-1; $i++){
-            $param = [$page[$i][0] => $page[$i][1]];
-        }
-
-        if(! $param == null){
-            Helper::redirect($page[$size][1], $param);
-        }else{
-            Helper::redirect($page[$size][1]);
-        }*/
     }
 
     public static function view(){
@@ -411,13 +388,13 @@ final class Cart {
 
         if(! @array_key_exists( $id, @$_SESSION['cart'])){
             return '<p><a class="btn btn-success float-right" type="button" 
-                        href="'.Helper::createLink('cart', ['id'=> $id,'cart' => 'add']).
-                            '" class="card-link" style="marging-left:10px;">add Cart</a></p>';
+                        href="'.Helper::createLink('cart', [$id,'add']).
+                            '" class="card-link" style="marging-left:10px;"> + </a></p>';
         }
         else{
             return '<p><a class="btn btn-danger float-right" type="button"
-                        href="'. Helper::createLink('cart', ['id' => $id,'cart' => 'delete']).
-                            '" class="card-link" style="marging-left:10px;">X</a></p>';
+                        href="'. Helper::createLink('cart', [$id,'delete']).
+                            '" class="card-link" style="marging-left:10px;"> x </a></p>';
         }
     }
 

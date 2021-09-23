@@ -4,7 +4,7 @@
         foreach ($errors as $error) {
             /* @var $error ValidatorError */
             if ($error->getSource() == $title) {
-                return ' style="background-color:pink;"';
+                return ' is-invalid';
             }
         }
         return '';
@@ -29,7 +29,7 @@
             ?>
             <div class="form-group">
                 <input type="text" placeholder="Name"  name="user[name]" 
-                    class="form-control"<?php echo error_field('name', $errors); ?>/></div>
+                    class="form-control<?php echo error_field('name', $errors); ?>"/></div>
             <?php
                 endif;
             ?>

@@ -5,15 +5,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>testProject</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/fonts/simple-line-icons.min.css">
-    <link rel="stylesheet" href="assets/css/styles.min.css">
+    <link rel="stylesheet" href="<?php echo Helper::base() ?>assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo Helper::base() ?>assets/fonts/simple-line-icons.min.css">
+    <link rel="stylesheet" href="<?php echo Helper::base() ?>assets/css/styles.min.css">
 </head>
 
 <body>
     <div>
         <nav class="navbar navbar-light navbar-expand-md navigation-clean">
-            <div class="container"><a class="navbar-brand" href=".">TC Shop</a>
+            <div class="container"><a class="navbar-brand" href="<?php echo Helper::base() ?>">TC Shop</a>
                 <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1">
                     <span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span>
                 </button>
@@ -26,9 +26,9 @@
                         <li class="dropdown"><a class="dropdown-toggle nav-link dropdown-toggle" 
                             data-toggle="dropdown" aria-expanded="false" href="#">User Option</a>
                             <div class="dropdown-menu" role="menu">
-                                <a class="dropdown-item" role="presentation" href="<?php echo Helper::createLink('user', ['view' => 'register']);?>">Register</a>
-                                <a class="dropdown-item" role="presentation" href="<?php echo Helper::createLink('user', ['view' => 'login']);?>">Login</a>
-                                <a class="dropdown-item" role="presentation" href="<?php echo Helper::createLink('user', ['view' => 'forgot']);?>">Forgot Password</a>
+                                <a class="dropdown-item" role="presentation" href="<?php echo Helper::createLink('user', ['register']);?>">Register</a>
+                                <a class="dropdown-item" role="presentation" href="<?php echo Helper::createLink('user', ['login']);?>">Login</a>
+                                <a class="dropdown-item" role="presentation" href="<?php echo Helper::createLink('user', ['forgot']);?>">Forgot Password</a>
                             </div>
                         </li>
                     </ul>
@@ -97,15 +97,17 @@
                         </nav>
                     </div>
                 </div>
-           
                 <?php
                     require $template;
+
+                    
+                    var_dump($_SERVER);
                 ?>
              </div>
         </div>
     </div>
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?php echo Helper::base() ?>assets/js/jquery.min.js"></script>
+    <script src="<?php echo Helper::base() ?>assets/bootstrap/js/bootstrap.min.js"></script>
     <!-- jQuery CDN -->
          <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
          <!-- Bootstrap Js CDN -->

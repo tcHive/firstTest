@@ -4,10 +4,13 @@
         'register', 'login', 'forgot'
     ];
 
-    $action = Helper::getUrlParam('view');
+    $action = Helper::urlArg();
 
-    if(! (array_key_exists('view',$_GET) && in_array($action, $view))){
-        throw  new NotFoundException("View not found");  
+    $action = $action[1];
+    //var_dump($action);
+
+    if( isset($action) && ! in_array($action, $view)){
+        throw  new NotFoundException("User activity not found");  
     }
     // redirect loged in users
     if( isset($_SESSION['_userId'])){ 
