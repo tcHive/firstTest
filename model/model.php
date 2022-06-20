@@ -15,7 +15,7 @@
 class Db
 {
     private $_host = "localhost";
-    private $_db_name = "testproject";
+    private $_db_name = "firsttest";
     private $_user = "root";
     private $_password = "";
 
@@ -207,7 +207,7 @@ class Db
 
 /**
  * Database handler class for sessions
- */
+ 
 class mysqlsessionHandler extends Db implements SessionHandlerInterface {
 
     // properties 
@@ -381,7 +381,7 @@ class mysqlsessionHandler extends Db implements SessionHandlerInterface {
             
         $this->conn = null;
     }
-}
+}*/
 
 /**
  * User database access object class

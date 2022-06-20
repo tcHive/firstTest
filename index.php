@@ -47,7 +47,6 @@ final class Index{
   
   private static $CLASS = [
     'Db' => '/model/model.php', 
-    'mysqlsessionHandler' => '/model/model.php',
     'UserDao' => '/model/model.php',
     'ProductDao' => '/model/model.php',
     'User' => '/view/view.php',
@@ -68,9 +67,9 @@ final class Index{
       spl_autoload_register([$this, 'loadClass']);
       // session handler setup
       try{
-        $handler = new mysqlsessionHandler();
-        session_set_save_handler( $handler);
-        session_start();  
+        //$handler = new mysqlsessionHandler();
+        //session_set_save_handler( $handler);
+        //session_start();  
       }catch( Exception $e){
         throw new $e;
       }
