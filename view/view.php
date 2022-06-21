@@ -400,6 +400,7 @@ final class Cart {
         foreach( $_SESSION['cart'] as $pdt){
             $product = new ProductDao();
             $products[$i++] = $product->selectProperties('id',(int)$pdt);
+            
         }
         foreach( $products as $pdt){
             self::$price += $pdt->getPrice();

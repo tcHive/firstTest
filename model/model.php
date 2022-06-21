@@ -381,7 +381,8 @@ class mysqlsessionHandler extends Db implements SessionHandlerInterface {
             
         $this->conn = null;
     }
-}*/
+} 
+**/
 
 /**
  * User database access object class

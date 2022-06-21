@@ -71,7 +71,7 @@ final class Index{
         //session_set_save_handler( $handler);
         //session_start();  
       }catch( Exception $e){
-        throw new $e;
+        throw $e;
       }
   }
 
