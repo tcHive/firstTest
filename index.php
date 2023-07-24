@@ -80,7 +80,7 @@ final class Index{
      */
   public function loadClass($name){
     if (!array_key_exists($name, self::$CLASS)) {
-        die('Class "' . $name . '" not found.');
+      throw  new Exception('Class "' . $name . '" not found.');
     }
     require_once __DIR__.self::$CLASS[$name];
   }
@@ -175,7 +175,7 @@ final class Index{
    * 
    */
   private function getTemplate($page) {
-      return __DIR__.self::PAGE_DIR.$page.'.phtml';
+    return __DIR__.self::PAGE_DIR.$page.'.phtml';
   }
 
   /**
